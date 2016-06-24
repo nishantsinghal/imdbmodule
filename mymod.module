@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * @file
+ * The Mymod module.
+ * Developer-Nishant
+ * In tis module custom module/view/block designing is shown.
+ */
+
+
+module_load_include('inc', 'mymod', 'block_view');
+/**
+ * Implements hook_menu().
+ */
+ function mymod_menu() {
+  $items = array();
+
+  $items['examples/form-example'] = array( //this creates a URL that will call this form at "examples/form-example"
+    'title' => 'Example Form', //page title
+    'description' => 'A form to mess around with.',
+    'page callback' => 'drupal_get_form', //this is the function that will be called when the page is accessed.  for a form, use drupal_get_form
+    'page arguments' => array('mymod_form'), //put the name of the form here
+    'access callback' => TRUE,
+    'file' => 'mymod.inc',
+  );
+
+  $items['examples/form-show'] = array( //this creates a URL at which data shown up"
+    'title' => 'Show Form', //page title
+    'description' => 'Show of a form',
+    'page callback' => 'filtershow', 
+    'page arguments' => array('mymod_form_filtershow'),
+    'access arguments' => array('administer your module'),
+    'file' => 'mymod.inc',
+  );
+
+  $items['examples/actors'] = array( //this creates a URL that will show actors list"
+    'title' => 'IMDB Actors', //page title
+    'description' => 'All IMDB actors list.',
+    'page callback' => 'actor_view', //this is the function that will be called when the page is accessed. 
+    'page arguments' => array('actor_filter_form'), //put the name of the form here
+    'access callback' => TRUE,
+    'file' => 'actor_view.inc',
+  );
+
+  $items['examples/movies'] = array( //this creates a URL that will show movies list"
+    'title' => 'IMDB Movies', //page title
+    'description' => 'All IMDB movies list.',
+    'page callback' => 'movie_view', //this is the function that will be called when the page is accessed.
+    'page arguments' => array('movie_filter_form'), //put the name of the form here
+    'access callback' => TRUE,
+    'file' => 'movie_view.inc',
+  );
+
+  $items['examples/songs'] = array( //this creates a URL that will show songs list"
+    'title' => 'IMDB Songs', //page title
+    'description' => 'All IMDB songs list.',
+    'page callback' => 'song_view', //this is the function that will be called when the page is accessed.
+    'page arguments' => array('song_filter_form'), //put the name of the form here
+    'access callback' => TRUE,
+    'file' => 'song_view.inc',
+  );
+
+  return $items;
+ }
+
+  /**
+   * Implements hook_block_info().
+   * Used to create a custom block
+   */
+  function mymod_block_info() {
+    $blocks = array();
+    $blocks['my_block'] = array(
+      'info' => t('Mymod Custom Block'),
+    );
+
+    $blocks['actors_song'] = array(
+      'info' => t('Custom Actor Songs Block'),
+    );
+
+    $blocks['movie_song'] = array(
+      'info' => t('Custom Movie Songs Block'),
+    );
+    
+    return $blocks;
+  }
+
+  /**
+  * Implements hook_block_view().
+  */
+  function mymod_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+      case 'my_block':
+        $block['subject'] = '';
+        $block['content'] = myblock_view();
+        break;
+
+      case 'actors_song':
+        $block['subject'] = '';
+        $block['content'] = actor_block_view();
+        break;
+
+      case 'movie_song':
+        $block['subject'] = '';
+        $block['content'] = movie_block_view();
+        //$block['content'] = '<div>fffffff</div>';
+        break;
+    }
+    return $block;
+  }
+
+
+  /**
+   * Implements hook_permission().
+   */ 
+  function mymod_permission() {
+    return array(
+    'administer your module' => array(
+      'title' => t('Student permission for my module'),
+      'description' => t('Apply student role permission for this page..'),
+      ),
+    );
+  }
+
+
+/**
+ * Implements hook_theme().
+ */ 
+  function mymod_theme() {
+    return array(
+      // as in 'theme('table1',...)
+      'table1' => array(
+        // routes to file exampleModule/spanks-box-thing.tpl.php or [YOUR ACTIVE THEME DIRECTORY]/spanky-box-thing.tpl.php
+        'template' => 'myblock_theme',
+        // these variables must be called in the theme function, and will appear in the template as $title, $body, $link
+        'arguments' => array(
+          'header' => NULL, 
+          'rows' => NULL, 
+        ),
+      ),
+    );
+  }
+
+ 

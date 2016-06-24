@@ -1,0 +1,42 @@
+<?php 
+/**
+ * @file
+ * The Module install file.
+ *
+ * Contains all function related to schema of different tables.
+ */
+ function mymod_schema() {
+  $schema['mymod_form'] = array(
+    //purpose of table
+    'description' => 'Table to keep the user data',
+    // This array keeps information about the fields in this table.
+    'fields' => array(
+      'userid' => array(
+        'description' => 'The primary identifier.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE, 
+        ),
+      'fname' => array(
+        'description' => 'first name of user',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        ),
+      'lname' => array(
+        'description' => 'last name of user',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        ),
+      'password' => array(
+        'description' => 'password of user',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        ),
+    ),
+    'primary key' => array('userid'),
+    );
+    return $schema;
+ }
